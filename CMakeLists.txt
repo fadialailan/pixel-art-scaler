@@ -1,9 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
 
-if(UNIX AND NOT APPLE)
-    set(LINUX TRUE)
-endif()
-
 project(pixel-art-scaler VERSION 1.0
 	DESCRIPTION "a program to scale pixel art and add a grid for visibilaty"
 	LANGUAGES CXX)
@@ -11,7 +7,8 @@ project(pixel-art-scaler VERSION 1.0
 add_executable(pixel-art-scaler src/main.cpp)
 target_include_directories(pixel-art-scaler PUBLIC include)
 
-if (LINUX)
+if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+	message(STATUS ">>> Linux")
 	find_package(X11)
 	target_link_libraries(pixel-art-scaler X11)
 endif ()
