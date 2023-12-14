@@ -1,4 +1,4 @@
-#include "pch_cimg.h"
+#include "pch_cimg.hpp"
 #include "CliParser.hpp"
 #include <iostream>
 

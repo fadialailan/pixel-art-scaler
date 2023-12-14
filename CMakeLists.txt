@@ -11,7 +11,7 @@ target_include_directories(pixel-art-scaler PUBLIC include)
 find_package(CLI11 REQUIRED)
 target_link_libraries(pixel-art-scaler CLI11::CLI11 m)
 # target_precompile_headers(pixel-art-scaler PUBLIC CImg.h)
-target_precompile_headers(pixel-art-scaler PUBLIC include/pch_cimg.h)
+target_precompile_headers(pixel-art-scaler PUBLIC include/pch_cimg.hpp)
 
 # if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
 # 	message(STATUS ">>> Linux")
