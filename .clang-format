@@ -4,5 +4,5 @@ UseTab: Always
 IndentWidth: 8
 TabWidth: 8
 
-ColumnLimit: 0
+ColumnLimit: 100
 ---
