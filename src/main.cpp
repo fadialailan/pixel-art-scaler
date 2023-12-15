@@ -6,7 +6,7 @@ int main(int argc, char **argv) {
 	CliParser cli_parse = CliParser();
 
 	cli_parse.setDefaultResizeFactor(20);
-	cli_parse.setDefaultGridSize(1);
+	cli_parse.setDefaultGridSize(0);
 
 	cli_parse.parse_inputs(argc, argv);
 

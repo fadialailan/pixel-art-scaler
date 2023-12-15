@@ -21,14 +21,14 @@ void CliParser::parse_inputs(int argc, char **argv) {
 	}
 }
 
-void CliParser::setDefaultResizeFactor(int new_value) { this->resize_factor = new_value; }
+void CliParser::setDefaultResizeFactor(uint new_value) { this->resize_factor = new_value; }
 
-void CliParser::setDefaultGridSize(int new_value) { this->grid_size = new_value; }
+void CliParser::setDefaultGridSize(uint new_value) { this->grid_size = new_value; }
 
 std::string CliParser::getInputFilename() { return this->input_filename; }
 
 std::string CliParser::getOutputFilename() { return this->output_filename; }
 
-int CliParser::getResizeFactor() { return this->resize_factor; }
+uint CliParser::getResizeFactor() { return this->resize_factor; }
 
-int CliParser::getGridSize() { return this->grid_size; }
+uint CliParser::getGridSize() { return this->grid_size; }
