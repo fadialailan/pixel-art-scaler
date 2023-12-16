@@ -5,19 +5,22 @@ project(pixel-art-scaler VERSION 1.0
 	LANGUAGES CXX)
 
 add_executable(pixel-art-scaler src/main.cpp src/CliParser.cpp src/ImageScaler.cpp)
-target_include_directories(pixel-art-scaler PUBLIC include)
 
 # find_package(Boost 1.40 COMPONENTS program_options REQUIRED)
 find_package(CLI11 REQUIRED)
-target_link_libraries(pixel-art-scaler CLI11::CLI11 m)
-# target_precompile_headers(pixel-art-scaler PUBLIC CImg.h)
-target_precompile_headers(pixel-art-scaler PUBLIC include/pch_cimg.hpp)
+find_package(PNG)
+find_package(JPEG)
+find_package(TIFF)
 
-# if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
-# 	message(STATUS ">>> Linux")
-# 	find_package(X11)
-# 	target_link_libraries(pixel-art-scaler PRIVATE X11)
-# endif ()
+# get_cmake_property(_variableNames VARIABLES)
+# list (SORT _variableNames)
+# foreach (_variableName ${_variableNames})
+#     message(STATUS "${_variableName}=${${_variableName}}")
+# endforeach()
+
+target_include_directories(pixel-art-scaler PUBLIC include ${JPEG_INCLUDE_DIRS} ${PNG_INCLUDE_DIRS} ${TIFF_INCLUDE_DIRS})
+target_link_libraries(pixel-art-scaler CLI11::CLI11 m ${JPEG_LIBRARIES} ${PNG_LIBRARIES} ${TIFF_LIBRARIES})
+target_precompile_headers(pixel-art-scaler PUBLIC include/pch_cimg.hpp)
 
 
 
