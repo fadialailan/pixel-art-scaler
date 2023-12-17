@@ -21,8 +21,8 @@ int main(int argc, char **argv) {
 	ImageScaler image_scaler(cli_parse.getInputFilename().c_str());
 
 	image_scaler.scale_image(cli_parse.getResizeFactor());
-
 	image_scaler.save_image(cli_parse.getOutputFilename().c_str());
+
 
 	
 }

@@ -6,24 +6,19 @@ project(pixel-art-scaler VERSION 1.0
 
 add_executable(pixel-art-scaler src/main.cpp src/CliParser.cpp src/ImageScaler.cpp)
 
-# find_package(Boost 1.40 COMPONENTS program_options REQUIRED)
 find_package(CLI11 REQUIRED)
 find_package(ImageMagick COMPONENTS Magick++)
-# find_package(PNG)
-# find_package(JPEG)
-# find_package(TIFF)
 
-get_cmake_property(_variableNames VARIABLES)
-list (SORT _variableNames)
-foreach (_variableName ${_variableNames})
-    message(STATUS "${_variableName}=${${_variableName}}")
-endforeach()
+# get_cmake_property(_variableNames VARIABLES)
+# list (SORT _variableNames)
+# foreach (_variableName ${_variableNames})
+#     message(STATUS "${_variableName}=${${_variableName}}")
+# endforeach()
 
 target_include_directories(pixel-art-scaler PUBLIC include ${ImageMagick_INCLUDE_DIRS})
 target_link_libraries(pixel-art-scaler CLI11::CLI11 m ${ImageMagick_LIBRARIES})
 
 # defines
-
 target_compile_definitions(pixel-art-scaler PUBLIC MAGICKCORE_HDRI_ENABLE=1)
 target_compile_definitions(pixel-art-scaler PUBLIC MAGICKCORE_QUANTUM_DEPTH=16)
 target_compile_definitions(pixel-art-scaler PUBLIC MAGICKCORE_CHANNEL_MASK_DEPTH=32)
