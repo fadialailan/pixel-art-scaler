@@ -1,11 +1,11 @@
-#include "pch_cimg.hpp"
 #include "CliParser.hpp"
 #include "ImageScaler.hpp"
+#include <Magick++.h>
 #include <iostream>
 
-#define DEBUG_LINE() std::cout << __FILE__ << ":" << __LINE__ << "\n"
-
 int main(int argc, char **argv) {
+	Magick::InitializeMagick(*argv);
+
 	CliParser cli_parse = CliParser();
 
 	cli_parse.setDefaultResizeFactor(20);
@@ -18,10 +18,7 @@ int main(int argc, char **argv) {
 	/* std::cout << "grid size: " << cli_parse.getGridSize() << "\n"; */
 	/* std::cout << "resize factor: " << cli_parse.getResizeFactor() << "\n"; */
 
-	DEBUG_LINE();
 	ImageScaler image_scaler(cli_parse.getInputFilename().c_str());
-	/* std::cout << __FILE__ << ":" << __LINE__ << "\n" ; */
-	DEBUG_LINE();
 
 	image_scaler.scale_image(cli_parse.getResizeFactor());
 
