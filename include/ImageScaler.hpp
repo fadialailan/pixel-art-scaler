@@ -9,5 +9,5 @@ class ImageScaler {
 	void scale_image(unsigned int scale_factor);
 
       private:
-	Magick::Image image_object;
+	std::unique_ptr<Magick::Image> image_object;
 };
