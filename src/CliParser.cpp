@@ -12,23 +12,32 @@ void CliParser::parse_inputs(int argc, char **argv) {
 	    ->required();
 
 	app.add_option("--resize-factor", this->resize_factor, "the image's resize factor");
-	app.add_option("--grid_size", this->grid_size, "the image's grid_size");
+	app.add_option("--grid-border-size", this->grid_border_size,
+		       "the image's grid size (set to 0 to disable)");
+	app.add_option("--grid-colour", this->grid_color, "the image's grid colour");
 
 	try {
 		app.parse((argc), (argv));
 	} catch (const CLI::ParseError &e) {
-		 exit(app.exit(e));
+		exit(app.exit(e));
 	}
 }
 
-void CliParser::setDefaultResizeFactor(uint new_value) { this->resize_factor = new_value; }
+void CliParser::setDefaultResizeFactor(unsigned int new_value) { this->resize_factor = new_value; }
 
-void CliParser::setDefaultGridSize(uint new_value) { this->grid_size = new_value; }
+void CliParser::setDefaultGridBorderSize(unsigned int new_value) {
+	this->grid_border_size = new_value;
+}
+
+void CliParser::setDefaultGridColor(std::string new_value) { this->grid_color = new_value; }
 
 std::string CliParser::getInputFilename() { return this->input_filename; }
 
 std::string CliParser::getOutputFilename() { return this->output_filename; }
 
-uint CliParser::getResizeFactor() { return this->resize_factor; }
+unsigned int CliParser::getResizeFactor() { return this->resize_factor; }
 
-uint CliParser::getGridSize() { return this->grid_size; }
+unsigned int CliParser::getGridBorderSize() { return this->grid_border_size; }
+
+std::string CliParser::getGridColor() { return this->grid_color; }
+

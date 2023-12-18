@@ -1,6 +1,6 @@
 #include "CliParser.hpp"
 #include "ImageScaler.hpp"
-#include <Magick++.h>
+#include "pch_magick++.hpp"
 #include <iostream>
 
 int main(int argc, char **argv) {
@@ -9,7 +9,8 @@ int main(int argc, char **argv) {
 	CliParser cli_parse = CliParser();
 
 	cli_parse.setDefaultResizeFactor(20);
-	cli_parse.setDefaultGridSize(0);
+	cli_parse.setDefaultGridBorderSize(0);
+	cli_parse.setDefaultGridColor("#0000ff");
 
 	cli_parse.parse_inputs(argc, argv);
 
@@ -18,10 +19,18 @@ int main(int argc, char **argv) {
 	/* std::cout << "grid size: " << cli_parse.getGridSize() << "\n"; */
 	/* std::cout << "resize factor: " << cli_parse.getResizeFactor() << "\n"; */
 
-	ImageScaler image_scaler(cli_parse.getInputFilename().c_str());
 
-	image_scaler.scale_image(cli_parse.getResizeFactor());
-	image_scaler.save_image(cli_parse.getOutputFilename().c_str());
+	int resize_factor = cli_parse.getResizeFactor();
+	int grid_border_size = cli_parse.getGridBorderSize();
+	std::string output_filename = cli_parse.getOutputFilename();
+	std::string input_filename = cli_parse.getInputFilename();
+
+	Magick::Color grid_color(cli_parse.getGridColor());
+
+	ImageScaler image_scaler(input_filename);
+	image_scaler.scale_image(resize_factor);
+	image_scaler.add_grid(grid_border_size, resize_factor, grid_color);
+	image_scaler.save_image(output_filename);
 
 
 	

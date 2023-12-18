@@ -16,7 +16,8 @@ find_package(ImageMagick COMPONENTS Magick++)
 # endforeach()
 
 target_include_directories(pixel-art-scaler PUBLIC include ${ImageMagick_INCLUDE_DIRS})
-target_link_libraries(pixel-art-scaler CLI11::CLI11 m ${ImageMagick_LIBRARIES})
+target_link_libraries(pixel-art-scaler PUBLIC CLI11::CLI11 m ${ImageMagick_LIBRARIES})
+target_precompile_headers(pixel-art-scaler PUBLIC include/pch_magick++.hpp)
 
 # defines
 target_compile_definitions(pixel-art-scaler PUBLIC MAGICKCORE_HDRI_ENABLE=1)

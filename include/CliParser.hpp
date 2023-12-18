@@ -1,25 +1,32 @@
+#ifndef CLI_PARSER_H
+#define CLI_PARSER_H
+
 #include <CLI/CLI.hpp>
 #include <memory>
 
 class CliParser {
 
-	private:
+      private:
 	std::string input_filename;
 	std::string output_filename;
-	uint resize_factor;
-	uint grid_size;
-	
-	public:
-	CliParser ();
+	unsigned int resize_factor;
+	unsigned int grid_border_size;
+	std::string grid_color;
+
+      public:
+	CliParser();
 
 	std::string getInputFilename();
 	std::string getOutputFilename();
-	uint getResizeFactor();
-	uint getGridSize();
+	unsigned int getResizeFactor();
+	unsigned int getGridBorderSize();
+	std::string getGridColor();
 
-	void setDefaultResizeFactor(uint new_value);
-	void setDefaultGridSize(uint new_value);
-	
+	void setDefaultResizeFactor(unsigned int new_value);
+	void setDefaultGridBorderSize(unsigned int new_value);
+	void setDefaultGridColor(std::string new_value);
+
 	void parse_inputs(int argc, char **argv);
-
 };
+
+#endif
