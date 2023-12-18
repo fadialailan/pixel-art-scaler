@@ -16,11 +16,23 @@ void CliParser::parse_inputs(int argc, char **argv) {
 		       "the image's grid size (set to 0 to disable)");
 	app.add_option("--grid-color", this->grid_color, "the image's grid color");
 
+	std::string grid_method_string;
+	app.add_option("--grid-method", grid_method_string, "grid method [strokes, accurate]");
+	CLI::IsMember(std::set({1, 2, 3}));
+
 	try {
 		app.parse((argc), (argv));
 	} catch (const CLI::ParseError &e) {
 		exit(app.exit(e));
 	}
+
+	std::optional<GridMethods::Value> grid_method_optional =
+	    GridMethods::fromString(grid_method_string);
+	if (!grid_method_optional.has_value()) {
+		fmt::println(stderr, "invalid grid method \"{}\"", grid_method_string);
+		exit(ERROR_PARSING_ARGUMENTS);
+	}
+	this->grid_method = grid_method_optional.value();
 }
 
 void CliParser::setDefaultResizeFactor(unsigned int new_value) { this->resize_factor = new_value; }
