@@ -2,13 +2,16 @@
 #define CLI_PARSER_H
 
 #include <CLI/CLI.hpp>
+#include <vector>
 #include <memory>
+#include <filesystem>
+#include <fmt/core.h>
 
 class CliParser {
 
       private:
-	std::string input_filename;
-	std::string output_filename;
+	std::vector<std::string> input_filenames;
+	std::string output_filename_format;
 	unsigned int resize_factor;
 	unsigned int grid_border_size;
 	std::string grid_color;
@@ -16,8 +19,8 @@ class CliParser {
       public:
 	CliParser();
 
-	std::string getInputFilename();
-	std::string getOutputFilename();
+	std::vector<std::string> getInputFilenames();
+	std::string getOutputFilenameFormat();
 	unsigned int getResizeFactor();
 	unsigned int getGridBorderSize();
 	std::string getGridColor();
@@ -25,8 +28,11 @@ class CliParser {
 	void setDefaultResizeFactor(unsigned int new_value);
 	void setDefaultGridBorderSize(unsigned int new_value);
 	void setDefaultGridColor(std::string new_value);
+	void setDefaultOutputFilenameFormat(std::string new_value);
 
 	void parse_inputs(int argc, char **argv);
+
+	std::string getFormatedOutputFilename(std::string input_filename);
 };
 
 #endif

@@ -1,6 +1,7 @@
 #include "ImageScaler.hpp"
 #include <exception>
 #include <iostream>
+#include <fmt/core.h>
 
 ImageScaler::ImageScaler(std::string filename) : image_object{std::make_unique<Magick::Image>()} {
 
@@ -47,7 +48,7 @@ void ImageScaler::add_grid(unsigned int grid_border_size, unsigned int block_siz
 
 	this->image_object->strokeColor(grid_color);
 	this->image_object->fillColor(Magick::Color(0,0,0, QuantumRange));
-	this->image_object->strokeWidth(grid_border_size*2);
+	this->image_object->strokeWidth(grid_border_size);
 	this->image_object->strokeAntiAlias(false);
 
 	std::vector<Magick::Drawable> all_the_lines;
@@ -57,11 +58,16 @@ void ImageScaler::add_grid(unsigned int grid_border_size, unsigned int block_siz
 	size_t block_count_x = width / block_size;
 	size_t block_count_y = height / block_size;
 
-	for (int pixel_x = 0; pixel_x < width; pixel_x += block_size) {
+	fmt::println("width : {}", width);
+	fmt::println("height : {}", height);
+	
+	for (int pixel_x = 0; pixel_x <= width; pixel_x += block_size) {
+		fmt::println("pixel_x : {}", pixel_x);
 		all_the_lines.push_back(Magick::DrawableLine(pixel_x, 0, pixel_x,height-1));
 	}
 
-	for (int pixel_y = 0; pixel_y < height; pixel_y += block_size) {
+	for (int pixel_y = 0; pixel_y <= height; pixel_y += block_size) {
+		fmt::println("pixel_x : {}", pixel_y);
 		all_the_lines.push_back(Magick::DrawableLine(0, pixel_y, width-1, pixel_y));
 	}
 

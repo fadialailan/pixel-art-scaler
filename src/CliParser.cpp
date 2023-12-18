@@ -5,16 +5,16 @@ CliParser::CliParser() {}
 void CliParser::parse_inputs(int argc, char **argv) {
 
 	CLI::App app = CLI::App("pixel resizer");
-	app.add_option("--input,-i", this->input_filename, "the input file to resize")
+	app.add_option("input-files", this->input_filenames, "the input file to resize")
 	    ->required()
 	    ->check(CLI::ExistingFile);
-	app.add_option("--output,-o", this->output_filename, "where to save the output file")
-	    ->required();
+	app.add_option("--output,-o", this->output_filename_format,
+		       "see output format section of the tutorial");
 
 	app.add_option("--resize-factor", this->resize_factor, "the image's resize factor");
 	app.add_option("--grid-border-size", this->grid_border_size,
 		       "the image's grid size (set to 0 to disable)");
-	app.add_option("--grid-colour", this->grid_color, "the image's grid colour");
+	app.add_option("--grid-color", this->grid_color, "the image's grid color");
 
 	try {
 		app.parse((argc), (argv));
@@ -30,10 +30,13 @@ void CliParser::setDefaultGridBorderSize(unsigned int new_value) {
 }
 
 void CliParser::setDefaultGridColor(std::string new_value) { this->grid_color = new_value; }
+void CliParser::setDefaultOutputFilenameFormat(std::string new_value) {
+	this->output_filename_format = new_value;
+}
 
-std::string CliParser::getInputFilename() { return this->input_filename; }
+std::vector<std::string> CliParser::getInputFilenames() { return this->input_filenames; }
 
-std::string CliParser::getOutputFilename() { return this->output_filename; }
+std::string CliParser::getOutputFilenameFormat() { return this->output_filename_format; }
 
 unsigned int CliParser::getResizeFactor() { return this->resize_factor; }
 
@@ -41,3 +44,14 @@ unsigned int CliParser::getGridBorderSize() { return this->grid_border_size; }
 
 std::string CliParser::getGridColor() { return this->grid_color; }
 
+std::string CliParser::getFormatedOutputFilename(std::string input_filename) {
+
+	std::filesystem::path input_path = input_filename;
+
+	std::string output_filename =
+	    fmt::format(this->output_filename_format, fmt::arg("stem", input_path.stem().string()),
+			fmt::arg("extension", input_path.extension().string()),
+			fmt::arg("resize_factor", resize_factor));
+
+	return output_filename;
+}

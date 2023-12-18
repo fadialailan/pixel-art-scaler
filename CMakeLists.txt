@@ -7,7 +7,8 @@ project(pixel-art-scaler VERSION 1.0
 add_executable(pixel-art-scaler src/main.cpp src/CliParser.cpp src/ImageScaler.cpp)
 
 find_package(CLI11 REQUIRED)
-find_package(ImageMagick COMPONENTS Magick++)
+find_package(ImageMagick COMPONENTS Magick++ REQUIRED)
+find_package(FMT REQUIRED)
 
 # get_cmake_property(_variableNames VARIABLES)
 # list (SORT _variableNames)
@@ -16,7 +17,7 @@ find_package(ImageMagick COMPONENTS Magick++)
 # endforeach()
 
 target_include_directories(pixel-art-scaler PUBLIC include ${ImageMagick_INCLUDE_DIRS})
-target_link_libraries(pixel-art-scaler PUBLIC CLI11::CLI11 m ${ImageMagick_LIBRARIES})
+target_link_libraries(pixel-art-scaler PUBLIC CLI11::CLI11 fmt::fmt m ${ImageMagick_LIBRARIES})
 target_precompile_headers(pixel-art-scaler PUBLIC include/pch_magick++.hpp)
 
 # defines
