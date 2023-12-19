@@ -31,5 +31,6 @@ int main(int argc, char **argv) {
 		image_scaler.performScalingProcedure(grid_method, resize_factor, grid_border_size,
 						     grid_color);
 		image_scaler.saveImage(output_filename);
+		fmt::println("saved image at: {}", output_filename);
 	}
 }
