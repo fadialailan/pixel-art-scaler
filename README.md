@@ -26,8 +26,6 @@ NOTE: if the `pixelated` images look blurry, then you are viewing this on a plaf
 
 <img src="docs/assets/example2.png" width="400px" style="image-rendering: pixelated;" alt="pixelated circle image"/>
 
-NOTE: if the `pixelated` images look blurry, then you are viewing this on a plaform that does not support the `image-rendering` CSS property, and it is for reasons like this that this tool was made
-
 The images you see above are all from 2 files only, the difference is the size and the
 image-rendering technique (you are seeing the different techniques available in the browser,
 you can read more at [MDN Web Docs][MDN Web Docs image-rendering]) , when dealing with
