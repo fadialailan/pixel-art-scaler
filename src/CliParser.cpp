@@ -67,7 +67,8 @@ std::string CliParser::getFormatedOutputFilename(std::string input_filename) {
 	std::string output_filename =
 	    fmt::format(this->output_filename_format, fmt::arg("stem", input_path.stem().string()),
 			fmt::arg("extension", input_path.extension().string()),
-			fmt::arg("resize_factor", resize_factor));
+			fmt::arg("resize_factor", resize_factor),
+			fmt::arg("parent", input_path.parent_path().string()));
 
 	return output_filename;
 }
