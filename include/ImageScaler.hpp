@@ -17,8 +17,6 @@ class ImageScaler {
 			   Magick::Color grid_color);
 	void fastSquare(unsigned int start_x, unsigned int start_y, unsigned int width,
 			unsigned int height, Magick::Color color);
-	void fastSquare2(unsigned int start_x, unsigned int start_y, unsigned int width,
-			 unsigned int height, Magick::Color color);
 
 	void performScalingProcedure(GridMethods::Value grid_method, unsigned int scale_factor,
 				     unsigned int grid_border_size, Magick::Color grid_color);

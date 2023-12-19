@@ -84,6 +84,7 @@ void ImageScaler::scaleWithGrid(unsigned int scale_factor, unsigned int pixel_ma
 	this->image_object =
 	    std::make_shared<Magick::Image>(Magick::Geometry(new_width, new_height), grid_color);
 
+	this->image_object->strokeColor(Magick::Color(0,0,0, QuantumRange));
 	for (unsigned int x_coordinate = 0; x_coordinate < width; x_coordinate++) {
 		for (unsigned int y_coordinate = 0; y_coordinate < height; y_coordinate++) {
 			unsigned int new_square_location_x =
@@ -94,39 +95,13 @@ void ImageScaler::scaleWithGrid(unsigned int scale_factor, unsigned int pixel_ma
 			Magick::Color pixel_color =
 			    old_image->pixelColor(x_coordinate, y_coordinate);
 
-			fastSquare2(new_square_location_x, new_square_location_y, block_size,
+			fastSquare(new_square_location_x, new_square_location_y, block_size,
 				    block_size, pixel_color);
 		}
 	}
 }
 
 void ImageScaler::fastSquare(unsigned int start_x, unsigned int start_y, unsigned int width,
-			     unsigned int height, Magick::Color color) {
-	Quantum *pixel_cache = this->image_object->getPixels(start_x, start_y, width, height);
-	size_t channel_count = this->image_object->channels();
-
-	Quantum *current_quantum_pointer = pixel_cache;
-	for (unsigned int x_coordinate = 0; x_coordinate < width; x_coordinate++) {
-		for (unsigned int y_coordinate = 0; y_coordinate < width; y_coordinate++) {
-			for (size_t current_channel = 0; current_channel < channel_count;
-			     current_channel++) {
-				if (current_channel == 0) {
-					*current_quantum_pointer = color.quantumRed();
-				} else if (current_channel == 1) {
-					*current_quantum_pointer = color.quantumGreen();
-				} else if (current_channel == 2) {
-					*current_quantum_pointer = color.quantumBlue();
-				} else if (current_channel == 3) {
-					*current_quantum_pointer = color.quantumAlpha();
-				}
-				current_quantum_pointer++;
-			}
-		}
-	}
-	this->image_object->syncPixels();
-}
-
-void ImageScaler::fastSquare2(unsigned int start_x, unsigned int start_y, unsigned int width,
 			      unsigned int height, Magick::Color color) {
 	unsigned int max_x = width + start_x;
 	unsigned int max_y = height + start_y;
