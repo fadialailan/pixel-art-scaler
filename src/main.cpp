@@ -26,8 +26,8 @@ int main(int argc, char **argv) {
 		std::string output_filename = cli_parse.getFormatedOutputFilename(input_filename);
 
 		ImageScaler image_scaler(input_filename);
-		image_scaler.scale_image(resize_factor);
-		image_scaler.add_grid(grid_border_size, resize_factor, grid_color);
-		image_scaler.save_image(output_filename);
+		image_scaler.scaleImage(resize_factor);
+		image_scaler.addGrid(grid_border_size, resize_factor, grid_color);
+		image_scaler.saveImage(output_filename);
 	}
 }
