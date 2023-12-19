@@ -1,4 +1,5 @@
 #include "ImageScaler.hpp"
+#include "error_codes.hpp"
 #include "fmt/core.h"
 #include <exception>
 #include <iostream>
@@ -9,13 +10,11 @@ ImageScaler::ImageScaler(std::string filename) : image_object{std::make_shared<M
 		this->image_object->read(filename);
 	} catch (Magick::Error &error_data) {
 		std::cerr << "error while reading the image: " << error_data.what() << "\n";
-		exit(1);
+		exit(ERROR_READING_IMAGE);
 	} catch (...) {
 		std::cerr << "uncaught exception while reading the image\n";
-		exit(2);
+		exit(ERROR_WRITING_IMAGE);
 	}
-	/* std::cout << "color space: " << this->image_object->quantizeColorSpace(); */
-	fmt::println("channels: {}", this->image_object->channels());
 }
 
 void ImageScaler::saveImage(std::string filename) {
@@ -72,16 +71,33 @@ void ImageScaler::addGrid(unsigned int grid_border_size, unsigned int block_size
 }
 
 void ImageScaler::scaleWithGrid(unsigned int scale_factor, unsigned int pixel_margin_size,
-				unsigned int block_size, Magick::Color grid_color) {
+				Magick::Color grid_color) {
 
 	size_t width = this->image_object->columns();
 	size_t height = this->image_object->rows();
-	size_t new_width = (width + 1) * pixel_margin_size;
-	size_t new_height = (height + 1) * pixel_margin_size;
+	size_t new_width = (width + 1) * pixel_margin_size + (width * scale_factor);
+	size_t new_height = (height + 1) * pixel_margin_size + (height * scale_factor);
+	unsigned int block_size = scale_factor;
 
-	Magick::Image new_image(Magick::Geometry(new_width, new_height), grid_color);
+	std::shared_ptr<Magick::Image> old_image = this->image_object;
 
-	Magick::Pixels pixel_view(*this->image_object);
+	this->image_object =
+	    std::make_shared<Magick::Image>(Magick::Geometry(new_width, new_height), grid_color);
+
+	for (unsigned int x_coordinate = 0; x_coordinate < width; x_coordinate++) {
+		for (unsigned int y_coordinate = 0; y_coordinate < height; y_coordinate++) {
+			unsigned int new_square_location_x =
+			    pixel_margin_size + (scale_factor + pixel_margin_size) * x_coordinate;
+			unsigned int new_square_location_y =
+			    pixel_margin_size + (scale_factor + pixel_margin_size) * y_coordinate;
+
+			Magick::Color pixel_color =
+			    old_image->pixelColor(x_coordinate, y_coordinate);
+
+			fastSquare2(new_square_location_x, new_square_location_y, block_size,
+				    block_size, pixel_color);
+		}
+	}
 }
 
 void ImageScaler::fastSquare(unsigned int start_x, unsigned int start_y, unsigned int width,
@@ -106,6 +122,34 @@ void ImageScaler::fastSquare(unsigned int start_x, unsigned int start_y, unsigne
 				current_quantum_pointer++;
 			}
 		}
+	}
+	this->image_object->syncPixels();
+}
+
+void ImageScaler::fastSquare2(unsigned int start_x, unsigned int start_y, unsigned int width,
+			      unsigned int height, Magick::Color color) {
+	unsigned int max_x = width + start_x;
+	unsigned int max_y = height + start_y;
+	std::string color_string(color);
+	for (unsigned int x_coordinate = start_x; x_coordinate < max_x; x_coordinate++) {
+		for (unsigned int y_coordinate = start_y; y_coordinate < max_y; y_coordinate++) {
+			this->image_object->pixelColor(x_coordinate, y_coordinate, color);
+		}
+	}
+	this->image_object->syncPixels();
+}
+
+void ImageScaler::performScalingProcedure(GridMethods::Value grid_method, unsigned int scale_factor,
+					  unsigned int grid_border_size, Magick::Color grid_color) {
+	if (grid_border_size == 0) {
+		this->scaleImage(scale_factor);
+		return;
+	}
+	if (grid_method == GridMethods::strokes) {
+		this->scaleImage(scale_factor);
+		this->addGrid(grid_border_size, scale_factor, grid_color);
+	} else if (grid_method == GridMethods::accurate) {
+		this->scaleWithGrid(scale_factor, grid_border_size, grid_color);
 	}
 }
 

@@ -1,5 +1,4 @@
-#ifndef CLI_PARSER_H
-#define CLI_PARSER_H
+#pragma once
 
 #include <CLI/CLI.hpp>
 #include <vector>
@@ -24,20 +23,22 @@ class CliParser {
       public:
 	CliParser();
 
-	std::vector<std::string> getInputFilenames();
-	std::string getOutputFilenameFormat();
-	unsigned int getResizeFactor();
-	unsigned int getGridBorderSize();
-	std::string getGridColor();
+	std::vector<std::string> getInputFilenames() const;
+	std::string getOutputFilenameFormat() const;
+	unsigned int getResizeFactor() const;
+	unsigned int getGridBorderSize() const;
+	std::string getGridColor() const;
+	GridMethods::Value getGridMethod() const;
 
 	void setDefaultResizeFactor(unsigned int new_value);
 	void setDefaultGridBorderSize(unsigned int new_value);
 	void setDefaultGridColor(std::string new_value);
 	void setDefaultOutputFilenameFormat(std::string new_value);
+	void setDefaultGridMethod(GridMethods::Value new_value);
+	
 
 	void parse_inputs(int argc, char **argv);
 
 	std::string getFormatedOutputFilename(std::string input_filename);
 };
 
-#endif

@@ -16,9 +16,10 @@ void CliParser::parse_inputs(int argc, char **argv) {
 		       "the image's grid size (set to 0 to disable)");
 	app.add_option("--grid-color", this->grid_color, "the image's grid color");
 
-	std::string grid_method_string;
-	app.add_option("--grid-method", grid_method_string, "grid method [strokes, accurate]");
-	CLI::IsMember(std::set({1, 2, 3}));
+	std::string grid_method_string = "";
+	std::string grid_method_help_string = fmt::format(
+	    "grid method [{}, {}]", GridMethods::strokes_string, GridMethods::accurate_string);
+	app.add_option("--grid-method", grid_method_string, grid_method_help_string);
 
 	try {
 		app.parse((argc), (argv));
@@ -26,13 +27,16 @@ void CliParser::parse_inputs(int argc, char **argv) {
 		exit(app.exit(e));
 	}
 
-	std::optional<GridMethods::Value> grid_method_optional =
-	    GridMethods::fromString(grid_method_string);
-	if (!grid_method_optional.has_value()) {
-		fmt::println(stderr, "invalid grid method \"{}\"", grid_method_string);
-		exit(ERROR_PARSING_ARGUMENTS);
-	}
-	this->grid_method = grid_method_optional.value();
+	if (app.count("--grid-method") > 0) {
+
+		std::optional<GridMethods::Value> grid_method_optional =
+		    GridMethods::fromString(grid_method_string);
+		if (!grid_method_optional.has_value()) {
+			fmt::println(stderr, "invalid grid method \"{}\"", grid_method_string);
+			exit(ERROR_PARSING_ARGUMENTS);
+		}
+		this->grid_method = grid_method_optional.value();
+	} // else do nothing
 }
 
 void CliParser::setDefaultResizeFactor(unsigned int new_value) { this->resize_factor = new_value; }
@@ -46,15 +50,15 @@ void CliParser::setDefaultOutputFilenameFormat(std::string new_value) {
 	this->output_filename_format = new_value;
 }
 
-std::vector<std::string> CliParser::getInputFilenames() { return this->input_filenames; }
+std::vector<std::string> CliParser::getInputFilenames() const { return this->input_filenames; }
 
-std::string CliParser::getOutputFilenameFormat() { return this->output_filename_format; }
+std::string CliParser::getOutputFilenameFormat() const { return this->output_filename_format; }
 
-unsigned int CliParser::getResizeFactor() { return this->resize_factor; }
+unsigned int CliParser::getResizeFactor() const { return this->resize_factor; }
 
-unsigned int CliParser::getGridBorderSize() { return this->grid_border_size; }
+unsigned int CliParser::getGridBorderSize() const { return this->grid_border_size; }
 
-std::string CliParser::getGridColor() { return this->grid_color; }
+std::string CliParser::getGridColor() const { return this->grid_color; }
 
 std::string CliParser::getFormatedOutputFilename(std::string input_filename) {
 
@@ -66,4 +70,10 @@ std::string CliParser::getFormatedOutputFilename(std::string input_filename) {
 			fmt::arg("resize_factor", resize_factor));
 
 	return output_filename;
+}
+
+GridMethods::Value CliParser::getGridMethod() const { return this->grid_method; }
+
+void CliParser::setDefaultGridMethod(GridMethods::Value new_value) {
+	this->grid_method = new_value;
 }

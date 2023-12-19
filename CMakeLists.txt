@@ -26,3 +26,8 @@ target_compile_definitions(pixel-art-scaler PUBLIC MAGICKCORE_QUANTUM_DEPTH=16)
 target_compile_definitions(pixel-art-scaler PUBLIC MAGICKCORE_CHANNEL_MASK_DEPTH=32)
 
 
+if (GCC)
+
+	target_compile_options(pixel-art-scaler PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+
