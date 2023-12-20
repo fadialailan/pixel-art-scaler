@@ -9,7 +9,7 @@ void CliParser::parse_inputs(int argc, char **argv) {
 	    ->required()
 	    ->check(CLI::ExistingFile);
 	app.add_option("--output,-o", this->output_filename_format,
-		       "see output format section of the tutorial");
+		       "specify the output format (more details in the docs)");
 
 	app.add_option("--resize-factor", this->resize_factor, "the image's resize factor");
 	app.add_option("--grid-border-size", this->grid_border_size,
